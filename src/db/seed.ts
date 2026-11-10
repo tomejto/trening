@@ -1,7 +1,13 @@
 import type { BodyPart, Exercise, ExerciseKind, Settings, TemplateItem, WorkoutTemplate } from './types';
 import { DESCRIPTIONS } from './descriptions';
 
-export const SEED_VERSION = 2;
+export const SEED_VERSION = 3;
+
+/** v3: ćwiczenia, które nie pasowały, zamienione w planie na nowe (stare zostają w historii). */
+export const REPLACED_IN_V3: Record<string, string> = {
+  'bulgarian-split-squat': 'leg-press',
+  'back-extension': 'hip-thrust',
+};
 
 export const emptyDescription = () => ({ muscles: '', setup: '', steps: [], mistakes: [], tips: [] });
 
@@ -10,9 +16,10 @@ function ex(
   name: string,
   bodyPart: BodyPart,
   kind: ExerciseKind,
-  opts: { unilateral?: boolean; weightStep?: number } = {},
+  opts: { unilateral?: boolean; weightStep?: number; archived?: boolean } = {},
 ): Exercise {
   return {
+    ...(opts.archived ? { archived: true } : {}),
     id,
     name,
     bodyPart,
@@ -42,11 +49,14 @@ export const SEED_EXERCISES: Exercise[] = [
   ex('db-lateral-raise', 'Unoszenie hantli bokiem', 'upper', 'isolation'),
   ex('triceps-pushdown-rope', 'Prostowanie ramion na wyciągu (lina)', 'upper', 'isolation'),
   // Dół
-  ex('bulgarian-split-squat', 'Przysiad bułgarski z hantlami', 'lower', 'compound', { unilateral: true, weightStep: 2.5 }),
+  ex('leg-press', 'Suwnica (wypychanie nóg)', 'lower', 'compound'),
+  ex('hip-thrust', 'Hip thrust', 'lower', 'compound'),
+  // Zastąpione w v3 (nie pasowały) – zostają w bazie dla historii, ukryte w wyborze ćwiczeń.
+  ex('bulgarian-split-squat', 'Przysiad bułgarski z hantlami', 'lower', 'compound', { unilateral: true, weightStep: 2.5, archived: true }),
   ex('walking-lunge', 'Wykroki chodzone z hantlami', 'lower', 'compound', { unilateral: true, weightStep: 2.5 }),
   ex('seated-leg-curl', 'Uginanie nóg siedząc', 'lower', 'isolation'),
   ex('leg-extension', 'Prostowanie nóg na maszynie', 'lower', 'isolation'),
-  ex('back-extension', 'Ławka rzymska z obciążeniem', 'lower', 'isolation'),
+  ex('back-extension', 'Ławka rzymska z obciążeniem', 'lower', 'isolation', { archived: true }),
   ex('hip-adduction', 'Przywodzenie na maszynie', 'lower', 'isolation'),
   ex('hip-abduction', 'Odwodzenie na maszynie', 'lower', 'isolation'),
   ex('standing-calf-raise', 'Wspięcia na palce stojąc', 'lower', 'isolation'),
@@ -89,10 +99,10 @@ export const SEED_TEMPLATES: WorkoutTemplate[] = [
     order: 1,
     cardio: { enabled: false, minutes: 20 },
     items: [
-      item('la-1', 'bulgarian-split-squat', 3, 8, 10),
+      item('la-1', 'leg-press', 3, 8, 10),
       item('la-2', 'seated-leg-curl', 3, 8, 10),
       item('la-3', 'leg-extension', 3, 10, 12),
-      item('la-4', 'back-extension', 3, 10, 12),
+      item('la-4', 'hip-thrust', 3, 8, 10),
       item('la-5', 'hip-adduction', 3, 12, 15),
       item('la-6', 'standing-calf-raise', 3, 12, 15),
     ],
@@ -125,7 +135,7 @@ export const SEED_TEMPLATES: WorkoutTemplate[] = [
       item('lb-1', 'walking-lunge', 3, 10, 12),
       item('lb-2', 'seated-leg-curl', 3, 12, 15),
       item('lb-3', 'leg-extension', 3, 12, 15),
-      item('lb-4', 'back-extension', 3, 12, 15, { note: 'Lżej niż we wtorek' }),
+      item('lb-4', 'hip-thrust', 3, 12, 15, { note: 'Lżej niż we wtorek' }),
       item('lb-5', 'hip-adduction', 3, 12, 15, { supersetWithNext: true }),
       item('lb-6', 'hip-abduction', 3, 12, 15),
       item('lb-7', 'seated-calf-raise', 3, 15, 15),

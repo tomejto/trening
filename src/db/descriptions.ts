@@ -268,6 +268,51 @@ export const DESCRIPTIONS: Record<string, ExerciseDescription> = {
     ],
   },
 
+  'leg-press': {
+    muscles: 'Czworogłowy uda, pośladkowy wielki, przywodziciele; kulszowo-goleniowe pomocniczo.',
+    setup:
+      'Usiądź, plecy i pośladki dociśnięte do oparcia. Stopy na platformie na szerokość bioder, palce lekko na zewnątrz, całe stopy na platformie. Odblokuj zabezpieczenia dopiero po wypchnięciu platformy.',
+    steps: [
+      'Opuszczaj platformę powoli, zginając kolana w kierunku klatki, kolana w linii palców.',
+      'Zejdź tak nisko, jak możesz bez odrywania pośladków i lędźwi od oparcia (zwykle kolana ok. 90° lub trochę głębiej).',
+      'Wypchnij platformę przez całe stopy, nie blokując kolan na górze.',
+    ],
+    mistakes: [
+      'Zbyt głębokie zejście – miednica się podwija, a lędźwie odrywają od oparcia.',
+      'Prostowanie kolan do pełnego zablokowania w górnej pozycji.',
+      'Kolana uciekające do środka.',
+      'Odrywanie pięt od platformy.',
+    ],
+    tips: [
+      'Stopy wyżej na platformie = więcej pośladków i dwójek; niżej = więcej czworogłowych.',
+      'Wpisuj ciężar samych talerzy (bez sanek) albo zawsze tak samo – ważne, żeby dało się porównać.',
+      'Na końcu treningu nie zostawiaj odblokowanej platformy – zawsze zamknij zabezpieczenia.',
+    ],
+  },
+
+  'hip-thrust': {
+    muscles: 'Pośladkowy wielki (główny), pośladkowy średni; kulszowo-goleniowe i czworogłowe pomocniczo.',
+    setup:
+      'Łopatki oparte o krawędź ławki (albo oparcie maszyny). Sztanga w zgięciu bioder na grubej podkładce, albo pas maszyny na biodrach. Stopy na szerokość bioder, ustawione tak, żeby w górnej pozycji piszczele były pionowo.',
+    steps: [
+      'Broda lekko przy klatce, wzrok przed siebie, nie w sufit.',
+      'Wypchnij biodra w górę przez pięty, aż tułów i uda będą w jednej linii.',
+      'Na górze mocno napnij pośladki przez sekundę, miednica lekko podwinięta.',
+      'Opuść biodra kontrolowanie, nie kładąc ciężaru na podłodze między powtórzeniami.',
+    ],
+    mistakes: [
+      'Przeprost w lędźwiach na górze zamiast wyprostu w biodrach.',
+      'Stopy za blisko (pracują czworogłowe) albo za daleko (pracują dwójki).',
+      'Odchylanie głowy do tyłu.',
+      'Zbyt szybkie opuszczanie i odbijanie.',
+    ],
+    tips: [
+      'Jeśli czujesz to w lędźwiach, zmniejsz ciężar i skup się na podwinięciu miednicy na górze.',
+      'W piątek (Dół B) lżej i więcej powtórzeń niż we wtorek.',
+      'Podkładka pod sztangę bardzo pomaga – bez niej szybko boli kość biodrowa.',
+    ],
+  },
+
   'walking-lunge': {
     muscles: 'Czworogłowy uda, pośladkowe, przywodziciele; łydki i tułów stabilizują.',
     setup: 'Hantle wzdłuż tułowia, wolny odcinek 10–15 m. Tułów wyprostowany, wzrok przed siebie.',

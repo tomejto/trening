@@ -1,6 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie';
 import type { BodyWeight, Exercise, Session, Settings, WorkoutTemplate } from './types';
-import { DEFAULT_SETTINGS, SEED_EXERCISES, SEED_TEMPLATES, SEED_VERSION } from './seed';
+import { DEFAULT_SETTINGS, REPLACED_IN_V3, SEED_EXERCISES, SEED_TEMPLATES, SEED_VERSION } from './seed';
 import { DESCRIPTIONS } from './descriptions';
 
 function isEmptyDescription(d: Exercise['description'] | undefined): boolean {
@@ -31,6 +31,33 @@ export class GymDB extends Dexie {
         .toCollection()
         .modify((ex: Exercise) => {
           if (isEmptyDescription(ex.description) && DESCRIPTIONS[ex.id]) ex.description = DESCRIPTIONS[ex.id];
+        });
+      await tx
+        .table('settings')
+        .toCollection()
+        .modify((s: Settings) => {
+          s.seedVersion = SEED_VERSION;
+        });
+    });
+
+    // v3: przysiad bułgarski → suwnica, ławka rzymska → hip thrust w planie zapisanym na telefonie.
+    // Nowe ćwiczenia są dodawane, stare zostają (historia), ale znikają z wyboru ćwiczeń.
+    this.version(3).upgrade(async (tx) => {
+      const exercises = tx.table('exercises');
+      for (const [oldId, newId] of Object.entries(REPLACED_IN_V3)) {
+        if (!(await exercises.get(newId))) await exercises.add(SEED_EXERCISES.find((e) => e.id === newId)!);
+        await exercises.update(oldId, { archived: true });
+      }
+      const swap = (id: string) => REPLACED_IN_V3[id] ?? id;
+      await tx
+        .table('templates')
+        .toCollection()
+        .modify((t: WorkoutTemplate) => {
+          t.items = t.items.map((it) => {
+            const exerciseId = swap(it.exerciseId);
+            const altExerciseIds = [...new Set(it.altExerciseIds.map(swap))].filter((id) => id !== exerciseId);
+            return { ...it, exerciseId, altExerciseIds };
+          });
         });
       await tx
         .table('settings')
